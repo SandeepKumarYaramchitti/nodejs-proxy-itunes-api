@@ -3,16 +3,16 @@ const axios = require('axios');
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
 
-// const limiter = rateLimit({
-//    windowMs: 30 * 1000,
-//    max: 10,
-//  });
+const limiter = rateLimit({
+   windowMs: 15 * 60 * 1000,
+   max: 100,
+ });
  
-//  const speedLimiter = slowDown({
-//    windowMs: 30 * 1000,
-//    delayAfter: 1,
-//    delayMs: 500
-//  });
+ const speedLimiter = slowDown({
+   windowMs: 15 * 60 * 1000,
+   delayAfter: 100,
+   delayMs: 500
+ });
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ const BASE_URL = 'https://rss.itunes.apple.com/api/v1/us/ios-apps/new-games-we-l
 let cacheData;
 let cacheTime;
 
-router.get('/games', async(req, res, next) => {
+router.get('/games', limiter, speedLimiter,  async(req, res, next) => {
     //Implement Authorization
    if (cacheTime && cacheTime > Date.now() - 60 * 1000) {
       console.log(`Returning cached data`);
