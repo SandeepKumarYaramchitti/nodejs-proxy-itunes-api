@@ -9,6 +9,6 @@ router.get('/', (req, res) => {
 
 const itunesGames = require('./itunesgames')
 
-router.use('/itunesgames', itunesGames);
+router.use('/itunes', itunesGames);
 
 module.exports = router
